@@ -1,0 +1,38 @@
+.v-card {
+    background-color: #fff;
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 16px 24px;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all .1s;
+
+    .v-card-title {
+        font-size: 24px;
+        font-weight: 300;
+        margin-top: 8px;
+        margin-bottom: 12px;
+    }
+    .v-card-title-small {
+        font-size: 20px;
+        font-weight: 300;
+        margin-top: 8px;
+        margin-bottom: 12px;
+    }
+
+    .v-card-fix-body {
+        margin-left: -24px;
+        margin-right: -24px;
+        margin-bottom: -16px;
+    }
+}
+
+.v-card.v-card-deep {
+    padding: 48px;
+
+    .v-card-title {
+        margin-top: 0;
+        font-size: 32px;
+    }
+}

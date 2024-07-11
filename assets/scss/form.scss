@@ -1,0 +1,68 @@
+.ax-input-box {
+    position: relative;
+
+    margin: 30px 0;
+}
+
+.ax-input {
+    padding: 10px 6px 10px 0px;
+
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid #000;
+    outline: none;
+
+    width: 100%;
+
+    transition: all .2s;
+}
+
+@keyframes disabled-loading {
+    0% {
+        background: #eee;
+    }
+
+    40% {
+        background: #ddd;
+    }
+
+    80% {
+        background: #eee;
+    }
+
+    100% {
+        background: #eee;
+    }
+}
+
+.ax-input:disabled {
+    background-color: #eaeaea;
+    animation: 2s disabled-loading infinite cubic-bezier(0.36, 0, 0.64, 1);
+    cursor: not-allowed;
+}
+
+.ax-input:focus {
+    border-color: #1780db;
+}
+
+.ax-padding-width-20 {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.ax-button-box {
+    display: flex;
+    align-items: center;
+    margin: 50px 0 20px 0;
+    justify-content: space-between;
+}
+
+.ax-error-info {
+    color: #db2828;
+    margin-bottom: -30px;
+}
+
+.v-explain-text {
+    margin-bottom: 10px;
+}
