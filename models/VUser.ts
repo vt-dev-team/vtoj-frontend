@@ -5,6 +5,7 @@ export interface VUserInfo {
 }
 
 export interface VUserLoginState {
+    status: number;
     login: boolean;
     user?: VUserInfo;
 };

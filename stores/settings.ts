@@ -1,6 +1,6 @@
 // stores/settings.ts
 import { defineStore } from "pinia";
-import type { VResponse } from "~/models/VReponse";
+import { VFetchError, type VResponse } from "~/models/VReponse";
 
 import type { VWebsiteSettings, VUISettings, VSettings } from "~/models/VSettings";
 
@@ -11,7 +11,7 @@ export const useSettingsStore = defineStore({
             title: "Vegetable OJ"
         } as VWebsiteSettings,
         ui: {} as VUISettings,
-        status: 401,
+        status: 0,
     }),
     actions: {
         // 从服务器获取配置
@@ -29,6 +29,7 @@ export const useSettingsStore = defineStore({
                 // 获取失败
                 this.status = res.error?.code || 500;
                 this.errorMessage = res.error?.message || "出现了错误";
+                throw new VFetchError(this.status, this.errorMessage);
             }
         }
     }

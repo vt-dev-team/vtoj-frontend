@@ -13,9 +13,6 @@ const loginUserStore = useLoginUserStore();
 
 const router = useRouter();
 
-definePageMeta({
-    ssr: false
-})
 useHead({
     title: `${t('nav.login')} - ${settingsStore.website.title}`
 })

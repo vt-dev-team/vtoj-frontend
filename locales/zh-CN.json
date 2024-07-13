@@ -38,6 +38,14 @@
         "submit_answer": "提交答案",
         "interactive_judge": "交互题"
     },
+    "submission": {
+        "language": "语言",
+        "code": "代码",
+        "submit": "提交",
+
+        "submit_success": "提交成功",
+        "submit_failed": "提交失败"
+    },
     "form": {
         "please_input": "请输入{0}",
         "repeat": "重复{0}",

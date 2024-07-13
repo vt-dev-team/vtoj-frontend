@@ -19,4 +19,12 @@ export interface VErrorResponse {
     }
 }
 
+export class VFetchError extends Error {
+    code: number;
+    constructor(code: number, message: string) {
+        super(message);
+        this.code = code;
+    }
+}
+
 export type VResponse<T> = VSuccessResponse<T> | VErrorResponse;
