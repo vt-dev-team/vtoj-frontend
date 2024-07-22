@@ -1,5 +1,6 @@
 <script setup lang="ts">;
 import { NIcon } from 'naive-ui';
+import { ChevronDownOutline } from '@vicons/ionicons5';
 
 const settingsStore = useSettingsStore();
 const loginUserStore = useLoginUserStore();
@@ -77,7 +78,7 @@ async function handleSelect(key: string | number) {
                             <div class="nav-item-content">
                                 <div class="nav-item-content__text">
                                     {{ loginUserStore.user?.username }} <n-icon>
-                                        <ChevronDown24Regular />
+                                        <ChevronDownOutline />
                                     </n-icon>
                                 </div>
                             </div>

@@ -3,14 +3,17 @@
         font-size: 22px;
         margin: 10px 0;
     }
+
     h4 {
         font-size: 20px;
         margin: 10px 0;
     }
+
     h5 {
         font-size: 18px;
         margin: 8px 0;
     }
+
     h6 {
         font-size: 16px;
         margin: 6px 0;
@@ -21,18 +24,14 @@
         margin: 5px 0;
         line-height: 20px;
     }
+}
 
-    pre {
-        font-size: 14px;
-        padding: 5px;
-        border-radius: 5px;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
-        margin: 5px;
-        user-select: all;
-
-        code {
-            background-color: #eee;
-        }
-    }
+pre {
+    font-size: 14px;
+    padding: 8px 15px;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+    margin: 5px;
+    user-select: all;
 }

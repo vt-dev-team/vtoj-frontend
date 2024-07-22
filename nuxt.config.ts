@@ -2,6 +2,7 @@
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
+import prismjs from 'vite-plugin-prismjs';
 
 export default defineNuxtConfig({
   css: [
@@ -22,6 +23,17 @@ export default defineNuxtConfig({
   },
   vite: {
     plugins: [
+      prismjs({
+        languages: ['cpp',
+          'c',
+          'java',
+          'python',
+          'javascript'
+        ],
+        plugins: ['line-numbers'],
+        theme: 'tomorrow',
+        css: true
+      }),
       AutoImport({
         imports: [
           {

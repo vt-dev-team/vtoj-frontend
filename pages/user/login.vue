@@ -11,6 +11,7 @@ const { t } = useI18n();
 const settingsStore = useSettingsStore();
 const loginUserStore = useLoginUserStore();
 
+const route = useRoute();
 const router = useRouter();
 
 useHead({
@@ -54,7 +55,7 @@ async function login() {
                 keepAliveOnHover: true
             });
             loginUserStore.update(res.data);
-            router.push('/');
+            router.push((route.query.url as string) || '/');
         }
         else {
             errorInfo.value = res.error?.message || t('user.login_failed');

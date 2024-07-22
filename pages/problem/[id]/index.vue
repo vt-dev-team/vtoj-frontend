@@ -3,11 +3,14 @@
 import type { VProblem } from '~/models/VProblem';
 import type { VResponse } from '~/models/VReponse';
 
+import { ServerOutline, TimeOutline } from '@vicons/ionicons5';
+
 import { marked } from 'marked';
 
 const { t } = useI18n();
 
 const settingsStore = useSettingsStore();
+const loginUserStore = useLoginUserStore();
 
 const route = useRoute();
 const router = useRouter();
@@ -51,8 +54,22 @@ watch(problemInfo, (newProblemInfo) => {
                 <template v-else>
                     <div class="v-card-title">{{ problemInfo.pid }}. {{ problemInfo.title }}</div>
                     <n-space>
-                        <n-tag :bordered="false" type="warning">{{ problemInfo.timeLimit }}ms</n-tag>
-                        <n-tag :bordered="false" type="info">{{ problemInfo.memoryLimit }}MB</n-tag>
+                        <n-tag :bordered="false" type="warning">
+                            {{ problemInfo.timeLimit }}ms
+                            <template #icon>
+                                <n-icon>
+                                    <TimeOutline />
+                                </n-icon>
+                            </template>
+                        </n-tag>
+                        <n-tag :bordered="false" type="info">
+                            {{ problemInfo.memoryLimit }}MB
+                            <template #icon>
+                                <n-icon>
+                                    <ServerOutline />
+                                </n-icon>
+                            </template>
+                        </n-tag>
                         <n-tag :bordered="false">{{ t(problemType[problemInfo.judgeMethod]) }}</n-tag>
                     </n-space>
                     <n-divider />
@@ -62,7 +79,27 @@ watch(problemInfo, (newProblemInfo) => {
         </n-grid-item>
         <n-grid-item span="4 l:1">
             <div class="v-card">
-                2
+                <div class="v-card-fix-body" style="margin-top: -16px">
+                    <n-list hoverable clickable>
+                        <template v-if="loginUserStore.login">
+                            <n-list-item @click="$router.push(`/problem/${problemId}/submit`)">
+                                提交代码
+                            </n-list-item>
+                            <n-list-item>
+                                解题记录
+                            </n-list-item>
+                            <!--有管理权限-->
+                            <template v-if="true">
+
+                            </template>
+                        </template>
+                        <template v-else>
+                            <n-list-item @click="$router.push('/user/login')">
+                                登录后提交
+                            </n-list-item>
+                        </template>
+                    </n-list>
+                </div>
             </div>
         </n-grid-item>
     </n-grid>

@@ -1,3 +1,19 @@
+<script setup lang="ts">
+import type { VProblemOutline, VProblemSearchParam } from '~/models/VProblem';
+import type { VResponse } from '~/models/VReponse';
+
+const { t } = useI18n();
+
+const settingsStore = useSettingsStore();
+
+const route = useRoute();
+const router = useRouter();
+
+useHead({
+    title: `${t('nav.home')} - ${settingsStore.website.title}`
+})
+</script>
+
 <template>
     <n-grid cols="4" :x-gap="20" :y-gap="12" item-responsive responsive="screen">
         <n-grid-item span="4 l:3">
