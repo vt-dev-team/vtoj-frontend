@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { VProblemOutline, VProblemSearchParam } from '~/models/VProblem';
+import type { VArray } from '~/models/VArray';
+import type { VProblemOutline } from '~/models/VProblem';
 import type { VResponse } from '~/models/VReponse';
 
 const { t } = useI18n();
@@ -13,15 +14,20 @@ useHead({
     title: `${t('nav.problems')} - ${settingsStore.website.title}`
 })
 
-const search: Ref<VProblemSearchParam> = ref({
-    page: route.query.page ? parseInt(route.query.page as string) : 1,
-    pageSize: route.query.pageSize ? parseInt(route.query.pageSize as string) : 25,
-    search: route.query.search ? route.query.search as string : "",
-})
 
-const { status, data: problemList, error } = useLazyAsyncData('problem-list', async () => {
-    const res: VResponse<VProblemOutline[]> = await $fetch('/api/problem/list', {
-        params: search.value
+const currentPage = ref(route.query.page ? parseInt(route.query.page as string) : 1);
+const pageSize = ref(route.query.pageSize ? parseInt(route.query.pageSize as string) : 20);
+const search = ref("");
+
+const { status, data: problemData, error } = useLazyAsyncData('problem-list', async () => {
+    const query = {
+        page: currentPage.value,
+        //pageSize: pageSize.value,
+        search: search.value
+    }
+    router.replace({ query });
+    const res: VResponse<VArray<VProblemOutline>> = await $fetch('/api/problem/list', {
+        params: query
     })
     if (res.status === 'success') {
         return res.data;
@@ -29,6 +35,8 @@ const { status, data: problemList, error } = useLazyAsyncData('problem-list', as
     else {
         throw new Error(res.error?.message || t('error'));
     }
+}, {
+    watch: [currentPage, pageSize, search]
 });
 
 if (error.value) {
@@ -41,7 +49,7 @@ if (error.value) {
         <n-grid-item span="4 l:3">
             <div class="v-card">
                 <div class="v-card-title">题库</div>
-                <template v-if="status !== 'success' || !problemList">
+                <template v-if="status !== 'success' || !problemData">
                     <n-skeleton text :repeat="2" /> <n-skeleton text style="width: 60%" />
                 </template>
                 <div class="v-card-fix-body" v-else>
@@ -54,20 +62,24 @@ if (error.value) {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="problem in problemList" :key="problem.id">
+                            <tr v-for="problem in problemData.data" :key="problem.id">
                                 <td>{{ problem.pid }}</td>
                                 <td><router-link :to='`/problem/${problem.id}`'>{{ problem.title }}</router-link></td>
                                 <td>{{ problem.difficulty }}</td>
                             </tr>
                         </tbody>
                     </n-table>
+                    <div class="v-pagination">
+                        <n-pagination v-model:page="currentPage"
+                            v-model:page-size="pageSize" :page-count="problemData.totalPages" />
+                    </div>
                 </div>
             </div>
         </n-grid-item>
         <n-grid-item span="4 l:1">
             <div class="v-card">
                 <div class="v-card-title-small">搜索</div>
-                <n-input v-model:value="search.search"></n-input>
+                <n-input v-model:value="search"></n-input>
             </div>
         </n-grid-item>
     </n-grid>

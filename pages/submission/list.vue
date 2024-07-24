@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { VSubmissionOutline } from '~/models/VSubmission';
 import type { VResponse } from '~/models/VReponse';
+import type { VArray } from '~/models/VArray';
 
 const { t } = useI18n();
 
@@ -14,7 +15,7 @@ useHead({
 })
 
 const currentPage = ref(route.query.page ? parseInt(route.query.page as string) : 1);
-const pageSize = ref(route.query.pageSize ? parseInt(route.query.pageSize as string) : 20);
+const pageSize = ref(route.query.pageSize ? parseInt(route.query.pageSize as string) : 10);
 
 const updatePage = (page: number) => {
     currentPage.value = page;
@@ -28,10 +29,10 @@ const updatePageSize = (nPageSize: number) => {
 const { status, data: submissionData, error } = useLazyAsyncData('submission-list', async () => {
     const query = {
         page: currentPage.value,
-        pageSize: pageSize.value
+        //pageSize: pageSize.value
     }
     router.replace({ query });
-    const res: VResponse<{ submissions: VSubmissionOutline[]; totalRecords: number; totalPages: number; pageSize: number; currentPage: number; }> = await $fetch('/api/submission/list', {
+    const res: VResponse<VArray<VSubmissionOutline>> = await $fetch('/api/submission/list', {
         params: query
     })
     if (res.status === 'success') {
@@ -72,7 +73,7 @@ if (error.value) {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="submission in submissionData.submissions" :key="submission.id">
+                            <tr v-for="submission in submissionData.data" :key="submission.id">
                                 <td>{{ submission.id }}</td>
                                 <td><problem-link :problem="submission.problem" /></td>
                                 <td><user-link :user="submission.submitter" /></td>
@@ -94,10 +95,7 @@ if (error.value) {
                     </n-table>
                     <div class="v-pagination">
                         <n-pagination v-model:page="currentPage"
-                            v-model:page-size="pageSize" :page-count="submissionData.totalPages"
-                            show-size-picker :page-sizes="[10, 20, 30, 40]"
-                            :on-update:page="updatePage"
-                            :on-update:page-size="updatePageSize" />
+                            v-model:page-size="pageSize" :page-count="submissionData.totalPages" />
                     </div>
                 </div>
             </div>
