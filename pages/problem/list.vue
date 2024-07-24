@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// TODO: 加载状态，还有SSR好像没管用
 import type { VProblemOutline, VProblemSearchParam } from '~/models/VProblem';
 import type { VResponse } from '~/models/VReponse';
 

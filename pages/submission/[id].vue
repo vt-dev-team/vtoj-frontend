@@ -75,11 +75,7 @@ onMounted(async () => {
                 </template>
                 <template v-else>
                     <div class="v-card-title">
-                        <span class="v-result" :class="statusCode[submissionInfo.result][1]">
-                            <n-icon>
-                                <HourglassOutline />
-                            </n-icon>{{ statusCode[submissionInfo.result][0] }}
-                        </span>
+                        <submission-result :result="submissionInfo.result" />
                     </div>
                     <n-progress type="line" :percentage="60" :show-indicator="false" :processing="isJudging" :border-radius="4"
                         :fill-border-radius="0" />
@@ -88,7 +84,7 @@ onMounted(async () => {
                     <n-divider />
                     测试点信息，(/)
                     <n-divider />
-                    <pre><code v-html="submissionInfo.codeText"></code></pre>
+                    <pre class="v-code"><code v-html="submissionInfo.codeText"></code></pre>
 
                 </template>
             </div>

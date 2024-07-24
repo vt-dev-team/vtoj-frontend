@@ -1,9 +1,4 @@
-export interface VProblemCreator {
-    id: number;
-    username: string;
-    rating: number;
-    tag: string;
-}
+import type { VUserOutline } from "./VUser";
 
 export interface VProblem {        
     id: number;
@@ -15,7 +10,7 @@ export interface VProblem {
     judgeMethod: number;
     timeLimit: number;
     memoryLimit: number;
-    creator: VProblemCreator
+    creator: VUserOutline;
 }
 
 export interface VProblemOutline {
@@ -25,7 +20,7 @@ export interface VProblemOutline {
     difficulty: number;
     tags: string;
     judgeMethod: number;
-    creator: VProblemCreator;
+    creator: VUserOutline;
 }
 
 export interface VProblemSearchParam {

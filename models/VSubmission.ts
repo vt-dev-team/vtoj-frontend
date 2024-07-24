@@ -1,9 +1,4 @@
-interface VSubmissionSubmitter {
-    id: number;
-    name: string;
-    rating: number;
-    tag: string;
-}
+import type { VUserOutline } from "./VUser";
 
 interface VSubmissionContest {
     id: number;
@@ -31,11 +26,26 @@ export interface VSubmission {
     result: number;
     score: number;
     info: string;
-    submitTime: Date;
-    judgeTime: Date;
-    judgeMachine: string;
-    submitter: VSubmissionSubmitter;
+    timeCost: number;
+    memoryCost: number;
     problem: VSubmissionProblem;
     contest: VSubmissionContest;
     domain: VSubmissionDomain;
+    submitter: VUserOutline;
+    submitTime: Date;
+    judgeTime: Date;
+    judgeMachine: string;
+}
+
+export interface VSubmissionOutline {
+    id: number;
+    result: number;
+    score: number;
+    timeCost: number;
+    memoryCost: number;
+    submitter: VUserOutline;
+    problem: VSubmissionProblem;
+    submitTime: Date;
+    judgeTime: Date;
+    judgeMachine: string;
 }

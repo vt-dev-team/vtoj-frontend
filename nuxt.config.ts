@@ -12,7 +12,13 @@ export default defineNuxtConfig({
   ],
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ["nuxtjs-naive-ui", '@pinia/nuxt', '@nuxtjs/i18n'],
+  modules: ["nuxtjs-naive-ui", '@pinia/nuxt', 'dayjs-nuxt', '@nuxtjs/i18n'],
+  dayjs: {
+    locales: ['en', 'zh-cn'],
+    plugins: ['relativeTime', 'utc', 'timezone'],
+    defaultLocale: 'zh-cn',
+    defaultTimezone: 'Asia/Shanghai',
+  },
   i18n: {
     vueI18n: './i18n.config.ts'
   },

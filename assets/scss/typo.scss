@@ -1,3 +1,31 @@
+
+
+a,
+a:visited,
+a:active {
+    color: #1780db;
+    transition: color .1s;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #2790eb;
+    text-decoration: underline;
+}
+
+.no-underline {
+    text-decoration: none !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 300;
+}
+
 .v-problem-info {
     h3 {
         font-size: 22px;
@@ -26,7 +54,7 @@
     }
 }
 
-pre {
+pre.v-code {
     font-size: 14px;
     padding: 8px 15px;
     border-radius: 5px;

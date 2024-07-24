@@ -18,30 +18,14 @@ body {
     transform: translate(-50%, -50%);
 }
 
-a,
-a:visited,
-a:active {
-    color: #1780db;
-    transition: color .1s;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #2790eb;
-    text-decoration: underline;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-weight: 300;
-}
-
 .float-right {
     float: right;
+}
+
+.v-pagination {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
 }
 
 .v-light {
