@@ -61,35 +61,33 @@ if (error.value) {
                 <div class="v-card-fix-body" v-else>
                     <n-table size="small">
                         <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>题目</th>
-                                <th>递交者</th>
-                                <th>结果</th>
-                                <th>得分</th>
-                                <th>递交时间</th>
-                                <th>评测时间</th>
-                                <th>评测机</th>
+                            <tr class="v-submission-list__header">
+                                <th class="v-submission-list__id">#</th>
+                                <th class="v-submission-list__submitter">递交者</th>
+                                <th class="v-submission-list__problem">题目</th>
+                                <th class="v-submission-list__result">结果</th>
+                                <th class="v-submission-list__score">得分</th>
+                                <th class="v-submission-list__update-time">更新时间</th>
+                                <th class="v-submission-list__judger">评测机</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="submission in submissionData.data" :key="submission.id">
-                                <td>{{ submission.id }}</td>
-                                <td><problem-link :problem="submission.problem" /></td>
-                                <td><user-link :user="submission.submitter" /></td>
-                                <td>
+                                <td class="v-submission-list__id">{{ submission.id }}</td>
+                                <td class="v-submission-list__submitter"><user-link :user="submission.submitter" /></td>
+                                <td class="v-submission-list__problem"><problem-link :problem="submission.problem" /></td>
+                                <td class="v-submission-list__result">
                                     <router-link :to='`/submission/${submission.id}`' class="no-underline">
                                         <submission-result :result="submission.result" />
                                     </router-link>
                                 </td>
-                                <td>
+                                <td class="v-submission-list__score">
                                     <router-link :to='`/submission/${submission.id}`' class="no-underline">
                                         <score-text :score="submission.score" />
                                     </router-link>
                                 </td>
-                                <td><date-text :date="submission.submitTime" /></td>
-                                <td><date-text :date="submission.judgeTime" /></td>
-                                <td>{{ submission.judgeMachine }}</td>
+                                <td class="v-submission-list__update-time"><date-text :date="submission.judgeTime" /></td>
+                                <td class="v-submission-list__judger">{{ submission.judgeMachine }}</td>
                             </tr>
                         </tbody>
                     </n-table>

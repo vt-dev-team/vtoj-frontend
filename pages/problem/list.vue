@@ -23,7 +23,7 @@ const { status, data: problemData, error } = useLazyAsyncData('problem-list', as
     const query = {
         page: currentPage.value,
         //pageSize: pageSize.value,
-        search: search.value
+        search: search.value ? search.value : undefined
     }
     router.replace({ query });
     const res: VResponse<VArray<VProblemOutline>> = await $fetch('/api/problem/list', {

@@ -55,6 +55,9 @@ export default defineNuxtConfig({
       Components({
         resolvers: [NaiveUiResolver()]
       })
-    ]
+    ],
+    ssr: {
+      noExternal: ['naive-ui']
+    }
   }
 })

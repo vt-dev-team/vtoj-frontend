@@ -1,19 +1,16 @@
 .v-container {
     width: calc(98% - 40px);
-    max-width: 976px;
     margin: 0 auto;
 }
 
 @media (min-width: 1600px) {
     .v-container {
         width: calc(95% - 40px);
-        max-width: 1200px;
     }
 }
 
 @media (min-width: 1920px) {
     .v-container {
         width: calc(90% - 40px);
-        max-width: 1400px;
     }
 }

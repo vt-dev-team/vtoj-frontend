@@ -1,0 +1,40 @@
+.v-submission-list__header {
+    background-color: rgba(250, 250, 252, 1);
+}
+
+.v-submission-list__header th {
+    background-color: transparent;
+}
+
+.v-submission-list__id,
+.v-submission-list__submitter,
+.v-submission-list__score,
+.v-submission-list__update-time {
+    text-align: center !important;
+    text-align: center !important;
+}
+
+.v-submission-list__result {
+    float: right;
+}
+
+.v-result.red {
+    color: #db2828;
+}
+
+.v-result.green {
+    color: #47af50;
+}
+
+.v-result.blue {
+    color: #2185d0;
+}
+
+.v-result.yellow {
+    color: #fbbd08;
+}
+
+.v-result {
+    display: flex;
+    align-items: center;
+}
