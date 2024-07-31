@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import { useNotification } from 'naive-ui';
-
 import type { VResponse } from '~/models/VReponse';
-import type { VUserInfo } from '~/models/VUser';
 
 const { t } = useI18n();
 
 const settingsStore = useSettingsStore();
 
-const notification = useNotification();
 const route = useRoute();
 const router = useRouter();
 
@@ -53,28 +49,22 @@ async function submitAnswer() {
         });
         if (res.status === 'success') {
             notification.success({
-                title: t('base.success'),
-                content: t('submission.submit_success'),
-                duration: 2500,
-                keepAliveOnHover: true
+                message: t('base.success'),
+                description: t('submission.submit_success'),
             });
             router.push(`/submission/${res.data.id}`);
         }
         else {
             notification.error({
-                title: t('base.error'),
-                content: res.error?.message || t('submission.submit_failed'),
-                duration: 2500,
-                keepAliveOnHover: true
+                message: t('base.error'),
+                description: res.error?.message || t('submission.submit_failed')
             });
         }
     }
     catch (e: any) {
         notification.error({
-            title: t('base.error'),
-            content: e.response?._data?.error?.message || t('submission.submit_failed'),
-            duration: 2500,
-            keepAliveOnHover: true
+            message: t('base.error'),
+            description: e.response?._data?.error?.message || t('submission.submit_failed')
         });
     }
     finally {
@@ -84,27 +74,27 @@ async function submitAnswer() {
 </script>
 
 <template>
-    <n-grid cols="4" :x-gap="20" :y-gap="12" item-responsive responsive="screen">
-        <n-grid-item span="4 l:3">
+    <two-column-layout>
+        <template #left>
             <div class="v-card">
                 <div class="v-card-title">提交代码</div>
-                <n-space style="margin: 10px 0;">
-                    <n-select v-model:value="language" :options="languageOptions" :disabled="submitting" size="small"
-                        style="width: 250px"></n-select>
-                    <n-button type="info" size="small" @click="submitAnswer">提交</n-button>
-                </n-space>
+                <a-space style="margin: 10px 0 20px 0;">
+                    <a-select v-model:value="language" :options="languageOptions" :disabled="submitting"
+                        style="width: 200px"></a-select>
+                    <a-button type="primary" @click="submitAnswer">提交</a-button>
+                </a-space>
                 <div class="v-card-fix-body">
                     <LazyClientOnly>
-                        <n-input type="textarea" v-model:value="code_content" :options="editorConfig"
-                            :lang="languageList[language][1]" style="height: 400px"></n-input>
+                        <a-textarea v-model:value="code_content" :options="editorConfig"
+                            :lang="languageList[language][1]" style="height: 400px"></a-textarea>
                     </LazyClientOnly>
                 </div>
             </div>
-        </n-grid-item>
-        <n-grid-item span="4 l:1">
+        </template>
+        <template #right>
             <div class="v-card">
                 <div class="v-card-title-small">呃呃呃</div>
             </div>
-        </n-grid-item>
-    </n-grid>
+        </template>
+    </two-column-layout>
 </template>

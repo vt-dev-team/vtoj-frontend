@@ -9,10 +9,10 @@ const formatText = $dayjs(props.date).format('YYYY-MM-DD HH:mm:ss');
 </script>
 
 <template>
-    <n-tooltip trigger="hover">
-        <template #trigger>
-            <span>{{ fromNowText }}</span>
+    <a-tooltip trigger="hover">
+        <template #title>
+            <span>{{ formatText }}</span>
         </template>
-        <span>{{ formatText }}</span>
-    </n-tooltip>
+        <span>{{ fromNowText }}</span>
+    </a-tooltip>
 </template>

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { useNotification } from 'naive-ui';
-import { HourglassOutline } from '@vicons/ionicons5';
-
 import type { VResponse } from '~/models/VReponse';
 import type { VSubmission } from '~/models/VSubmission';
 
@@ -11,7 +8,6 @@ const { t } = useI18n();
 
 const settingsStore = useSettingsStore();
 
-const notification = useNotification();
 const route = useRoute();
 const router = useRouter();
 
@@ -61,33 +57,31 @@ onMounted(async () => {
 })
 </script>
 <template>
-    <n-grid cols="4" :x-gap="20" :y-gap="12" item-responsive responsive="screen">
-        <n-grid-item span="4 l:3">
+    <two-column-layout>
+        <template #left>
             <div class="v-card">
-                <n-result v-if="status === 'error'" status="error" title="出错了" :description="error?.message">
-                    <template #footer>
-                        <n-button @click="refresh">重试</n-button>
+                <a-result v-if="status === 'error'" status="error" title="出错了" :description="error?.message">
+                    <template #extra>
+                        <a-button type="primary" @click="refresh">重试</a-button>
                     </template>
-                </n-result>
+                </a-result>
                 <template v-else-if="status !== 'success' || !submissionInfo">
-                    <n-skeleton :width="146" :sharp="false" size="medium" />
-                    <n-skeleton text :repeat="2" /> <n-skeleton text style="width: 60%" />
+                    <a-skeleton active />
                 </template>
                 <template v-else>
                     <div class="v-card-title">
                         <submission-result :result="submissionInfo.result" />
                     </div>
-                    <n-progress type="line" :percentage="60" :show-indicator="false" :processing="isJudging" :border-radius="4"
-                        :fill-border-radius="0" />
-                    <n-divider />
+                    <a-progress type="line" :percent="60" :format="(p: number) => `${p}分`" />
+                    <a-divider />
                     编译器信息
-                    <n-divider />
+                    <a-divider />
                     测试点信息，(/)
-                    <n-divider />
+                    <a-divider />
                     <pre class="v-code"><code v-html="submissionInfo.codeText"></code></pre>
 
                 </template>
             </div>
-        </n-grid-item>
-    </n-grid>
+        </template>
+    </two-column-layout>
 </template>

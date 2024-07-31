@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { CheckmarkOutline, CloseOutline, HourglassOutline, ServerOutline, SettingsOutline, TimeOutline } from '@vicons/ionicons5';
+import { HourglassOutlined, CloseOutlined, CheckOutlined, ClockCircleOutlined, DatabaseOutlined, SettingOutlined } from '@ant-design/icons-vue';
 
 const props = defineProps<{
     result: number;
 }>();
 
 const statusCode = [
-    ['Pending', 'blue', HourglassOutline],
-    ['Pending Rejudge', 'blue', HourglassOutline],
-    ['Judging', 'blue', HourglassOutline],
-    ['Accepted', 'green', CheckmarkOutline],
-    ['Wrong Answer', 'red', CloseOutline],
-    ['Time Limit Exceeded', 'yellow', TimeOutline],
-    ['Memory Limit Exceeded', 'purple', ServerOutline],
-    ['Output Limit Exceeded', 'red', CloseOutline],
-    ['Runtime Error', 'red', CloseOutline],
-    ['Unknown Error', 'red', CloseOutline],
-    ['System Error', 'red', SettingsOutline],
-    ['Unaccepted', 'red', CloseOutline]
+    ['Pending', 'blue', HourglassOutlined],
+    ['Pending Rejudge', 'blue', HourglassOutlined],
+    ['Judging', 'blue', HourglassOutlined],
+    ['Accepted', 'green', CheckOutlined],
+    ['Wrong Answer', 'red', CloseOutlined],
+    ['Time Limit Exceeded', 'yellow', ClockCircleOutlined],
+    ['Memory Limit Exceeded', 'purple', DatabaseOutlined],
+    ['Output Limit Exceeded', 'red', CloseOutlined],
+    ['Runtime Error', 'red', CloseOutlined],
+    ['Unknown Error', 'red', CloseOutlined],
+    ['System Error', 'red', SettingOutlined],
+    ['Unaccepted', 'red', CloseOutlined]
 ];
 
 const resultText = statusCode[props.result][0];
@@ -27,8 +27,7 @@ const resultIcon = statusCode[props.result][2];
 
 <template>
     <span class="v-result" :class="resultColor">
-        <n-icon>
-            <resultIcon />
-        </n-icon>{{ resultText }}
+        <resultIcon />
+        {{ resultText }}
     </span>
 </template>

@@ -16,9 +16,12 @@ const dayjs = useDayjs();
 
 const nowTime = ref(dayjs().format('YYYY-MM-DD HH:mm:ss'));
 // 设置一个Interval，每秒更新一次时间
-const timeSetter = setInterval(() => {
-    nowTime.value = dayjs().format('YYYY-MM-DD HH:mm:ss');
-}, 1000);
+let timeSetter: NodeJS.Timeout;
+onNuxtReady(() => {
+    timeSetter = setInterval(() => {
+        nowTime.value = dayjs().format('YYYY-MM-DD HH:mm:ss');
+    }, 1000);
+})
 // 在离开页面后需要销毁
 onUnmounted(() => {
     clearInterval(timeSetter);
@@ -27,17 +30,17 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <n-grid cols="4" :x-gap="20" :y-gap="12" item-responsive responsive="screen">
-        <n-grid-item span="4 l:3">
+    <two-column-layout>
+        <template #left>
             <div class="v-card">
                 <div class="v-card-title">比赛列表</div>
             </div>
-        </n-grid-item>
-        <n-grid-item span="4 l:1">
+        </template>
+        <template #right>
             <div class="v-card">
                 <div class="v-card-title-small">当前时间</div>
                 {{ nowTime }}
             </div>
-        </n-grid-item>
-    </n-grid>
+        </template>
+    </two-column-layout>
 </template>

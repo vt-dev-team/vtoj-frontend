@@ -1,26 +1,17 @@
 <script setup lang="ts">;
-import { NIcon } from 'naive-ui';
-import { ChevronDownOutline } from '@vicons/ionicons5';
+import { HomeFilled, AppstoreFilled, TrophyFilled, SignalFilled, FundFilled } from '@ant-design/icons-vue';
 
 const settingsStore = useSettingsStore();
 const loginUserStore = useLoginUserStore();
 
-const renderIcon = (icon: Component) => {
-    return () => {
-        return h(NIcon, null, {
-            default: () => h(icon)
-        })
-    }
-}
-
 const router = useRouter();
 
-const navs: [string, string, string, number][] = [
-    ["nav.home", "/", "home", 1],
-    ["nav.problems", "/problem/list", "problem", 1],
-    ["nav.contest", "/contest/list", "contest", 1],
-    ["nav.status", "/submission/list", "status", 1],
-    ["nav.rank", "/user/rank", "rank", 1],
+const navs: [string, string, string, Component, number][] = [
+    ["nav.home", "/", "home", HomeFilled, 1],
+    ["nav.problems", "/problem/list", "problem", AppstoreFilled, 1],
+    ["nav.contest", "/contest/list", "contest", TrophyFilled, 1],
+    ["nav.status", "/submission/list", "status", FundFilled, 1],
+    ["nav.rank", "/user/rank", "rank", SignalFilled, 1],
 ]
 
 const userDropdown = [{
@@ -31,21 +22,16 @@ const userDropdown = [{
     key: "logout"
 }]
 
-async function handleSelect(key: string | number) {
-    switch (key) {
-        case 'userinfo':
-            if (loginUserStore.user)
-                router.push(`/user/${loginUserStore.user.id}`);
-            else
-                router.push('/user/login');
-            break;
-        case 'logout':
-            try {
-                await $fetch('/api/user/logout', { method: "POST" });
-                loginUserStore.logout();
-            }
-            catch (e) { }
-            break;
+async function logout() {
+    try {
+        await $fetch('/api/user/logout', { method: "POST" });
+        loginUserStore.logout();
+    }
+    catch (e) {
+        notification.error({
+            message: '出现错误',
+            description: '注销失败，请重试',
+        });
     }
 }
 </script>
@@ -62,28 +48,39 @@ async function handleSelect(key: string | number) {
                     </div>
                 </div>
                 <template v-for="(nav, i) in navs" :key="i">
-                    <router-link class="nav-item" :to="nav[1]">
+                    <nuxt-link class="nav-item" :to="nav[1]">
                         <div class="nav-item-content">
+                            <div class="nav-item-content__icon">
+                                <component :is="nav[3]" />
+                            </div>
                             <div class="nav-item-content__text">
                                 {{ $t(nav[0]) }}
                             </div>
                         </div>
-                    </router-link>
+                    </nuxt-link>
                 </template>
             </div>
             <div class="v-navbar-bar">
                 <template v-if="loginUserStore.login">
-                    <n-dropdown trigger="click" :options="userDropdown" @select="handleSelect">
+                    <a-dropdown :trigger="['click']">
                         <div class="nav-item">
                             <div class="nav-item-content">
                                 <div class="nav-item-content__text">
-                                    {{ loginUserStore.user?.username }} <n-icon>
-                                        <ChevronDownOutline />
-                                    </n-icon>
+                                    {{ loginUserStore.user?.username }}
+                                    <DownOutlined />
                                 </div>
                             </div>
                         </div>
-                    </n-dropdown>
+                        <template #overlay>
+                            <a-menu>
+                                <a-menu-item key="0">
+                                    <nuxt-link :to="`/user/${loginUserStore.user?.id}`">我的信息</nuxt-link>
+                                </a-menu-item>
+                                <a-menu-divider />
+                                <a-menu-item key="3" @click="logout()">注销</a-menu-item>
+                            </a-menu>
+                        </template>
+                    </a-dropdown>
                 </template>
                 <template v-else>
                     <router-link to="/user/login" class="nav-item">

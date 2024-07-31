@@ -41,7 +41,7 @@ const ratingColor = ratingColorCalc(props.user.rating);
 <template>
     <router-link :to="userLink" :class="`user-${ratingColor}`">
         {{ user.username }}
-        <n-tag v-for="tag in userTags" :key="tag" size="small">{{ tag }}</n-tag>
+        <a-tag v-for="tag in userTags" :key="tag">{{ tag }}</a-tag>
     </router-link>
 </template>
 

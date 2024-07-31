@@ -17,19 +17,47 @@ useHead({
 const currentPage = ref(route.query.page ? parseInt(route.query.page as string) : 1);
 const pageSize = ref(route.query.pageSize ? parseInt(route.query.pageSize as string) : 10);
 
-const updatePage = (page: number) => {
-    currentPage.value = page;
-}
-
-const updatePageSize = (nPageSize: number) => {
-    currentPage.value = 1;
-    pageSize.value = nPageSize;
-}
+const columns = [
+    {
+        title: '#',
+        key: 'id',
+        dataIndex: 'id',
+    },
+    {
+        title: '递交者',
+        key: 'submitter',
+        dataIndex: 'submitter'
+    },
+    {
+        title: '题目',
+        key: 'problem',
+        dataIndex: 'problem'
+    },
+    {
+        title: '结果',
+        key: 'result',
+        dataIndex: 'result'
+    },
+    {
+        title: '得分',
+        key: 'score',
+        dataIndex: 'score'
+    },
+    {
+        title: '更新时间',
+        key: 'judgeTime',
+        dataIndex: 'judgeTime'
+    },
+    {
+        title: '评测机',
+        key: 'judgeMachine',
+        dataIndex: 'judgeMachine'
+    }
+]
 
 const { status, data: submissionData, error } = useLazyAsyncData('submission-list', async () => {
     const query = {
-        page: currentPage.value,
-        //pageSize: pageSize.value
+        page: currentPage.value
     }
     router.replace({ query });
     const res: VResponse<VArray<VSubmissionOutline>> = await $fetch('/api/submission/list', {
@@ -51,58 +79,53 @@ if (error.value) {
 </script>
 
 <template>
-    <n-grid cols="4" :x-gap="20" :y-gap="12" item-responsive responsive="screen">
-        <n-grid-item span="4 l:3">
+    <two-column-layout>
+        <template #left>
             <div class="v-card">
                 <div class="v-card-title">评测队列</div>
                 <template v-if="status !== 'success' || !submissionData">
-                    <n-skeleton text :repeat="2" /> <n-skeleton text style="width: 60%" />
+                    <a-skeleton active />
                 </template>
                 <div class="v-card-fix-body" v-else>
-                    <n-table size="small">
-                        <thead>
-                            <tr class="v-submission-list__header">
-                                <th class="v-submission-list__id">#</th>
-                                <th class="v-submission-list__submitter">递交者</th>
-                                <th class="v-submission-list__problem">题目</th>
-                                <th class="v-submission-list__result">结果</th>
-                                <th class="v-submission-list__score">得分</th>
-                                <th class="v-submission-list__update-time">更新时间</th>
-                                <th class="v-submission-list__judger">评测机</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="submission in submissionData.data" :key="submission.id">
-                                <td class="v-submission-list__id">{{ submission.id }}</td>
-                                <td class="v-submission-list__submitter"><user-link :user="submission.submitter" /></td>
-                                <td class="v-submission-list__problem"><problem-link :problem="submission.problem" /></td>
-                                <td class="v-submission-list__result">
-                                    <router-link :to='`/submission/${submission.id}`' class="no-underline">
-                                        <submission-result :result="submission.result" />
-                                    </router-link>
-                                </td>
-                                <td class="v-submission-list__score">
-                                    <router-link :to='`/submission/${submission.id}`' class="no-underline">
-                                        <score-text :score="submission.score" />
-                                    </router-link>
-                                </td>
-                                <td class="v-submission-list__update-time"><date-text :date="submission.judgeTime" /></td>
-                                <td class="v-submission-list__judger">{{ submission.judgeMachine }}</td>
-                            </tr>
-                        </tbody>
-                    </n-table>
+                    <a-table :columns="columns" :data-source="submissionData.data"
+                        :pagination="false" size="small">
+                        <template #bodyCell="{ column, record }">
+                            <template v-if="column.key === 'id'">
+                                {{ record.id }}
+                            </template>
+                            <template v-else-if="column.key === 'submitter'">
+                                <user-link :user="record.submitter" />
+                            </template>
+                            <template v-else-if="column.key === 'problem'">
+                                <problem-link :problem="record.problem" />
+                            </template>
+                            <template v-else-if="column.key === 'result'">
+                                <router-link :to="'/submission/' + record.id">
+                                    <submission-result :result="record.result" />
+                                </router-link>
+                            </template>
+                            <template v-else-if="column.key === 'score'">
+                                <router-link :to="'/submission/' + record.id">
+                                    <score-text :score="record.score" />
+                                </router-link>
+                            </template>
+                            <template v-else-if="column.key === 'judgeTime'">
+                                <date-text :date="record.judgeTime" />
+                            </template>
+                        </template>
+                    </a-table>
                     <div class="v-pagination">
-                        <n-pagination v-model:page="currentPage"
-                            v-model:page-size="pageSize" :page-count="submissionData.totalPages" />
+                        <a-pagination v-model:current="currentPage" v-model:page-size="pageSize"
+                            :total="submissionData.totalRecords" />
                     </div>
                 </div>
             </div>
-        </n-grid-item>
-        <n-grid-item span="4 l:1">
+        </template>
+        <template #right>
             <div class="v-card">
                 <div class="v-card-title-small">筛选</div>
 
             </div>
-        </n-grid-item>
-    </n-grid>
+        </template>
+    </two-column-layout>
 </template>

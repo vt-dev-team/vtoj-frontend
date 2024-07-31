@@ -1,9 +1,12 @@
+<script setup lang="ts">
+</script>
+
 <template>
-    <n-grid cols="4" :x-gap="20" :y-gap="12" item-responsive responsive="screen">
-        <n-grid-item span="4 l:3">
+    <two-column-layout>
+        <template #left>
             <div class="v-card">
-                <div class="v-card-title">排名</div>
+                <div class="v-card-title">用户排名</div>
             </div>
-        </n-grid-item>
-    </n-grid>
+        </template>
+    </two-column-layout>
 </template>

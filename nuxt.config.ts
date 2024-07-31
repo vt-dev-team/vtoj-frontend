@@ -1,7 +1,4 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import prismjs from 'vite-plugin-prismjs';
 
 export default defineNuxtConfig({
@@ -12,7 +9,15 @@ export default defineNuxtConfig({
   ],
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ["nuxtjs-naive-ui", '@pinia/nuxt', 'dayjs-nuxt', '@nuxtjs/i18n'],
+  modules: [
+    '@pinia/nuxt',
+    'dayjs-nuxt',
+    '@nuxtjs/i18n',
+    "@ant-design-vue/nuxt"
+  ],
+  antd: {
+
+  },
   dayjs: {
     locales: ['en', 'zh-cn'],
     plugins: ['relativeTime', 'utc', 'timezone'],
@@ -39,21 +44,6 @@ export default defineNuxtConfig({
         plugins: ['line-numbers'],
         theme: 'tomorrow',
         css: true
-      }),
-      AutoImport({
-        imports: [
-          {
-            'naive-ui': [
-              'useDialog',
-              'useMessage',
-              'useNotification',
-              'useLoadingBar'
-            ]
-          }
-        ]
-      }),
-      Components({
-        resolvers: [NaiveUiResolver()]
       })
     ],
     ssr: {

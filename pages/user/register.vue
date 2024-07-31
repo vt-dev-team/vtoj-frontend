@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { type FormInst, useNotification } from 'naive-ui';
-
 import type { VResponse } from '~/models/VReponse';
 import type { VUserInfo } from '~/models/VUser';
 
 import { sha256 } from 'js-sha256';
+import type { Rule } from 'ant-design-vue/es/form';
 
 const { t } = useI18n();
 
@@ -18,8 +17,6 @@ useHead({
 })
 
 //---
-const regForm = ref<FormInst | null>(null)
-
 const regUser = ref({
     username: '',
     password: '',
@@ -30,22 +27,17 @@ const regUser = ref({
     studentId: ''
 });
 
-function validatePasswordStartWith(
-    rule: any,
-    value: string
-): boolean {
-    return (
-        !!regUser.value.password &&
-        regUser.value.password.startsWith(value) &&
-        regUser.value.password.length >= value.length
-    )
-}
-
-function validatePasswordSame(rule: any, value: string): boolean {
-    return value === regUser.value.password
-}
-
 const loading = ref(false);
+
+const validatePass = async (_rule: Rule, value: string) => {
+    if (value === '') {
+        return Promise.reject('请再次输入密码');
+    } else if (value !== regUser.value.password) {
+        return Promise.reject("密码不一致");
+    } else {
+        return Promise.resolve();
+    }
+};
 
 const rules = {
     username: [
@@ -62,18 +54,8 @@ const rules = {
     ],
     rptPassword: [
         {
-            required: true,
-            message: t('form.please_input', [t('form.repeat', [t('user.password')])])
-        },
-        {
-            validator: validatePasswordStartWith,
-            message: t('form.password_not_same'),
-            trigger: 'input'
-        },
-        {
-            validator: validatePasswordSame,
-            message: t('form.password_not_same'),
-            trigger: ['blur', 'password-input']
+            validator: validatePass,
+            trigger: 'change'
         }
     ],
     email: [
@@ -82,7 +64,7 @@ const rules = {
             message: t('form.please_input', [t('user.email')])
         },
         {
-            type: 'email',
+            pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
             message: t('form.email_format_error'),
             trigger: 'blur'
         }
@@ -97,66 +79,59 @@ const rules = {
             message: t('form.phone_format_error'),
             trigger: 'blur'
         }
-    ]
+    ],
 }
 
 // ---
 
-const notification = useNotification();
-
-function register() {
-    regForm.value?.validate(async (errors: any) => {
-        if (!errors) {
-            loading.value = true;
-            try {
-                let passwordHash = regUser.value.password;
-                for (let i = 0; i < 100; i++) {
-                    passwordHash = sha256(passwordHash);
-                }
-                const res: VResponse<VUserInfo> = await $fetch("/api/user/register", {
-                    method: "post",
-                    body: JSON.stringify({
-                        ...regUser.value,
-                        password: passwordHash
-                    })
-                })
-                loading.value = false;
-                if (res.status === 'success') {
-                    notification.success({
-                        title: t('success'),
-                        content: t('user.register_success'),
-                        duration: 2500,
-                        keepAliveOnHover: true
-                    });
-                    loginUserStore.update(res.data);
-                    router.push('/');
-                }
-                else {
-                    notification.error({
-                        title: t('error'),
-                        content: res.error?.message || t('error'),
-                        duration: 2500,
-                        keepAliveOnHover: true
-                    })
-                }
-            }
-            catch (e: any) {
-                notification.error({
-                    title: t('base.error'),
-                    content: e.response?._data?.error?.message || t('user.login_failed'),
-                    duration: 2500,
-                    keepAliveOnHover: true
-                })
-            }
+async function register() {
+    loading.value = true;
+    try {
+        let passwordHash = regUser.value.password;
+        for (let i = 0; i < 100; i++) {
+            passwordHash = sha256(passwordHash);
+        }
+        const res: VResponse<VUserInfo> = await $fetch("/api/user/register", {
+            method: "post",
+            body: JSON.stringify({
+                ...regUser.value,
+                password: passwordHash
+            })
+        })
+        if (res.status === 'success') {
+            notification.success({
+                message: t('success'),
+                description: t('user.register_success')
+            });
+            loginUserStore.update(res.data);
+            router.push('/');
         }
         else {
             notification.error({
-                title: t('base.error'),
-                content: t('form.validate_error'),
-                duration: 2500,
-                keepAliveOnHover: true
+                message: t('error'),
+                description: res.error?.message || t('error'),
             })
         }
+    }
+    catch (e: any) {
+        notification.error({
+            message: t('base.error'),
+            description: e.response?._data?.error?.message || t('user.login_failed'),
+        })
+    }
+    finally {
+        loading.value = false;
+    }
+}
+
+function onFinish() {
+    register();
+}
+
+function onFinishFailed() {
+    notification.error({
+        message: t('base.error'),
+        description: t('form.please_input_all_fields'),
     })
 }
 </script>
@@ -164,39 +139,40 @@ function register() {
 <template>
     <div class="v-card">
         <div class="v-card-title">{{ $t("nav.register") }}</div>
-        <n-form ref="regForm" :model="regUser" :rules="rules">
-            <n-form-item path="username" :label="$t('user.username')">
-                <n-input v-model:value="regUser.username"
+        <a-form layout="vertical" ref="regForm" :model="regUser" :rules="rules" @finish="onFinish"
+            @finishFailed="onFinishFailed">
+            <a-form-item name="username" :label="$t('user.username')">
+                <a-input v-model:value="regUser.username"
                     :placeholder="$t('form.please_input', [$t('user.username')])" />
-            </n-form-item>
-            <n-form-item path="password" :label="$t('user.password')">
-                <n-input type="password" v-model:value="regUser.password"
+            </a-form-item>
+            <a-form-item name="password" :label="$t('user.password')">
+                <a-input type="password" v-model:value="regUser.password"
                     :placeholder="$t('form.please_input', [$t('user.password')])" />
-            </n-form-item>
-            <n-form-item path="rptPassword" :label="$t('form.repeat', [$t('user.password')])">
-                <n-input type="password" v-model:value="regUser.rptPassword"
+            </a-form-item>
+            <a-form-item name="rptPassword" :label="$t('form.repeat', [$t('user.password')])">
+                <a-input type="password" v-model:value="regUser.rptPassword"
                     :placeholder="$t('form.please_input', [$t('form.repeat', [$t('user.password')])])" />
-            </n-form-item>
-            <n-form-item path="email" :label="$t('user.email')">
-                <n-input v-model:value="regUser.email" :placeholder="$t('form.please_input', [$t('user.email')])" />
-            </n-form-item>
-            <n-form-item path="phone" :label="$t('user.phone')">
-                <n-input v-model:value="regUser.phone" :placeholder="$t('form.please_input', [$t('user.phone')])" />
-            </n-form-item>
-            <n-form-item path="realname" :label="$t('user.realname')">
-                <n-input v-model:value="regUser.realname"
+            </a-form-item>
+            <a-form-item name="email" :label="$t('user.email')">
+                <a-input v-model:value="regUser.email" :placeholder="$t('form.please_input', [$t('user.email')])" />
+            </a-form-item>
+            <a-form-item name="phone" :label="$t('user.phone')">
+                <a-input v-model:value="regUser.phone" :placeholder="$t('form.please_input', [$t('user.phone')])" />
+            </a-form-item>
+            <a-form-item name="realname" :label="$t('user.realname')">
+                <a-input v-model:value="regUser.realname"
                     :placeholder="$t('form.please_input', [$t('user.realname')])" />
-            </n-form-item>
-            <n-form-item path="studentId" :label="$t('user.student_id')">
-                <n-input v-model:value="regUser.studentId"
+            </a-form-item>
+            <a-form-item name="studentId" :label="$t('user.student_id')">
+                <a-input v-model:value="regUser.studentId"
                     :placeholder="$t('form.please_input', [$t('user.student_id')])" />
-            </n-form-item>
-        </n-form>
-        <div class="v-explain-text">{{ $t("user.has_account_immediate") }}<router-link to="/user/login">{{
-            $t('nav.login') }}</router-link>
-        </div>
-        <n-button type="info" style="border-radius: 0; padding-left: 40px; padding-right: 40px;" @click="register"
-            :disabled="loading">{{
-                $t('nav.register') }}</n-button>
+            </a-form-item>
+            <div class="v-explain-text">{{ $t("user.has_account_immediate") }}<router-link to="/user/login">{{
+                $t('nav.login') }}</router-link>
+            </div>
+            <a-button type="primary" htmlType="submit"
+                style="border-radius: 0; padding-left: 40px; padding-right: 40px;" :disabled="loading">{{
+                    $t('nav.register') }}</a-button>
+        </a-form>
     </div>
 </template>

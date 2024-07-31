@@ -1,0 +1,22 @@
+.v-list {
+    .v-list-item {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 12px 16px;
+    }
+
+    .v-list-item:not(:last-child) {
+        border-bottom: 1px solid rgba(0, 0, 0, .12);
+    }
+}
+
+.v-list.v-list-hover {
+    .v-list-item {
+        transition: background-color .2s;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, .04);
+        }
+    }
+}

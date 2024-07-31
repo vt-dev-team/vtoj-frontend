@@ -19,6 +19,24 @@ const currentPage = ref(route.query.page ? parseInt(route.query.page as string) 
 const pageSize = ref(route.query.pageSize ? parseInt(route.query.pageSize as string) : 20);
 const search = ref("");
 
+const columns = [
+    {
+        title: '标题',
+        key: 'title',
+        dataIndex: 'title',
+    },
+    {
+        title: '难度',
+        key: 'difficulty',
+        dataIndex: 'difficulty'
+    },
+    {
+        title: '标签',
+        key: 'tags',
+        dataIndex: 'tags'
+    }
+]
+
 const { status, data: problemData, error } = useLazyAsyncData('problem-list', async () => {
     const query = {
         page: currentPage.value,
@@ -45,42 +63,37 @@ if (error.value) {
 </script>
 
 <template>
-    <n-grid cols="4" :x-gap="20" :y-gap="12" item-responsive responsive="screen">
-        <n-grid-item span="4 l:3">
+    <two-column-layout>
+        <template #left>
             <div class="v-card">
                 <div class="v-card-title">题库</div>
                 <template v-if="status !== 'success' || !problemData">
-                    <n-skeleton text :repeat="2" /> <n-skeleton text style="width: 60%" />
+                    <a-skeleton active />
                 </template>
                 <div class="v-card-fix-body" v-else>
-                    <n-table size="small">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>{{ $t("problem.title") }}</th>
-                                <th>{{ $t("problem.difficulty") }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="problem in problemData.data" :key="problem.id">
-                                <td>{{ problem.pid }}</td>
-                                <td><router-link :to='`/problem/${problem.id}`'>{{ problem.title }}</router-link></td>
-                                <td>{{ problem.difficulty }}</td>
-                            </tr>
-                        </tbody>
-                    </n-table>
+                    <a-table :data-source="problemData.data" :columns="columns" :pagination="false" size="small">
+                        <template #bodyCell="{ column, record }">
+                            <template v-if="column.key === 'title'">
+                                <nuxt-link :to="'/problem/' + record.id">
+                                    {{ record.pid }}. {{ record.title }}
+                                </nuxt-link>
+                            </template>
+                            <template v-if="column.key === 'tags'">
+                                <tag-list :tag="record.tags" />
+                            </template>
+                        </template>
+                    </a-table>
                     <div class="v-pagination">
-                        <n-pagination v-model:page="currentPage"
-                            v-model:page-size="pageSize" :page-count="problemData.totalPages" />
+                        <a-pagination v-model:current="currentPage" v-model:page-size="pageSize" :total="problemData.totalRecords" show-less-items />
                     </div>
                 </div>
             </div>
-        </n-grid-item>
-        <n-grid-item span="4 l:1">
+        </template>
+        <template #right>
             <div class="v-card">
                 <div class="v-card-title-small">搜索</div>
-                <n-input v-model:value="search"></n-input>
+                <a-input v-model:value="search" placeholder="搜索题目内容" />
             </div>
-        </n-grid-item>
-    </n-grid>
+        </template>
+    </two-column-layout>
 </template>

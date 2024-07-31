@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { useNotification } from 'naive-ui';
-
 import type { VResponse } from '~/models/VReponse';
 import type { VUserInfo } from '~/models/VUser';
 
@@ -20,8 +18,6 @@ useHead({
 
 const loading = ref(false);
 const errorInfo = ref("");
-
-const notification = useNotification();
 
 const logUser = ref({
     auth: "",
@@ -49,10 +45,8 @@ async function login() {
         })
         if (res.status === 'success') {
             notification.success({
-                title: t('base.success'),
-                content: t('user.login_success'),
-                duration: 2500,
-                keepAliveOnHover: true
+                message: t('base.success'),
+                description: t('user.login_success'),
             });
             loginUserStore.update(res.data);
             router.push((route.query.url as string) || '/');
@@ -60,15 +54,17 @@ async function login() {
         else {
             errorInfo.value = res.error?.message || t('user.login_failed');
             notification.error({
-                title: t('base.error'),
-                content: errorInfo.value,
-                duration: 2500,
-                keepAliveOnHover: true
+                message: t('base.error'),
+                description: errorInfo.value,
             });
         }
     }
     catch (e: any) {
         errorInfo.value = e.response?._data?.error?.message || t('user.login_failed');
+        notification.error({
+            message: t('base.error'),
+            description: errorInfo.value,
+        });
     }
     finally {
         loading.value = false;
@@ -93,8 +89,8 @@ async function login() {
         <div class="ax-button-box">
             <div>{{ $t("user.no_account_immediate") }}<router-link to="/user/register">{{ $t('nav.register')
                     }}</router-link></div>
-            <n-button type="info" style="border-radius: 0; padding-left: 40px; padding-right: 40px;" @click="login"
-                :disabled="loading">登录</n-button>
+            <a-button type="primary" style="border-radius: 0; padding-left: 40px; padding-right: 40px;" @click="login"
+                :disabled="loading">登录</a-button>
         </div>
     </div>
 </template>

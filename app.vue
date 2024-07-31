@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { NNotificationProvider } from 'naive-ui';
 import { useSettingsStore } from './stores/settings';
 
 const router = useRouter();
@@ -13,12 +12,10 @@ if (settingsStore.status !== 200) {
 <template>
     <div>
         <NuxtRouteAnnouncer />
-        <n-notification-provider>
-            <Navbar />
-            <div class="v-container" id="vtoj-app">
-                <NuxtPage />
-            </div>
-            <Footer />
-        </n-notification-provider>
+        <Navbar />
+        <div class="v-container" id="vtoj-app">
+            <NuxtPage />
+        </div>
+        <Footer />
     </div>
 </template>
