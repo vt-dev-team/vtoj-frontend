@@ -7,6 +7,7 @@ body {
     height: 100%;
     overflow: auto;
     font-size: 14px;
+    margin: 0;
     font-family: v-sans, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
@@ -40,6 +41,49 @@ body {
     height: 40vh;
     bottom: -30vh;
     z-index: -1;
+}
+.v-tag {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 3px;
+    background-color: #eaeaea;
+    color: #212223;
+    font-size: 14px;
+    transition: all 0.2s;
+
+    &.v-tag-link {
+        cursor: pointer;
+    }
+
+    &.primary {
+        background-color: #1780db;
+        color: #fff;
+    }
+
+    &.secondary {
+        background-color: #6c757d;
+        color: #fff;
+    }
+
+    &.success {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    &.danger {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    &.warning {
+        background-color: #ffc107;
+        color: #212223;
+    }
+
+    &.info {
+        background-color: #17a2b8;
+        color: #fff;
+    }
 }
 
 ::-webkit-scrollbar {

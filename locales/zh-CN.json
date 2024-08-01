@@ -22,7 +22,6 @@
         "username_email_or_phone": "用户名，邮箱或手机号",
         "no_account_immediate": "没有账号？立即",
         "has_account_immediate": "已有账号？立即",
-
         "login_failed": "登录失败",
         "login_success": "登录成功",
         "register_success": "注册成功"
@@ -32,17 +31,33 @@
         "description": "描述",
         "creator": "创建者",
         "difficulty": "难度",
-
         "normal_judge": "传统题",
         "special_judge": "Special Judge",
         "submit_answer": "提交答案",
         "interactive_judge": "交互题"
     },
+    "contest": {
+        "title": "标题",
+        "description": "描述",
+        "creator": "创建者",
+        "start_time": "开始时间",
+        "end_time": "结束时间",
+        "duration": "时长",
+        "not_started": "未开始",
+        "ongoing": "进行中",
+        "ended": "已结束",
+        "start_from": "开始于",
+        "end_at": "结束于",
+        "private": "私有",
+        "public": "公开",
+        "ACM": "ACM",
+        "OI": "OI",
+        "normal_practice": "普通练习"
+    },
     "submission": {
         "language": "语言",
         "code": "代码",
         "submit": "提交",
-
         "submit_success": "提交成功",
         "submit_failed": "提交失败"
     },

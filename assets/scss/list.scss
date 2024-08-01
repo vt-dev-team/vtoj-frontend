@@ -3,10 +3,38 @@
         box-sizing: border-box;
         width: 100%;
         padding: 12px 16px;
-    }
 
-    .v-list-item:not(:last-child) {
-        border-bottom: 1px solid rgba(0, 0, 0, .12);
+        &.v-padding-big {
+            padding: 15px 40px;
+
+            .v-fix-body {
+                margin-top: 10px;
+                margin-bottom: -15px;
+                margin-left: -40px;
+                margin-right: -40px;
+            }
+        }
+
+        &:not(:last-child) {
+            border-bottom: 1px solid rgba(0, 0, 0, .12);
+        }
+
+        .v-fix-body {
+            margin-top: 10px;
+            margin-bottom: -12px;
+            margin-left: -16px;
+            margin-right: -16px;
+        }
+    }
+}
+
+.v-contest-list {
+    .v-list-item {
+        border: none !important;
+
+        .v-list-title {
+            margin: 5px 0;
+        }
     }
 }
 
