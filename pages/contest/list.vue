@@ -162,7 +162,7 @@ function contestTooltipTitle(contest: VContestOutline): string {
             </template>
             <template v-else>
                 <div class="v-card" v-for="contest in contestData.data" :key="contest.id">
-                    <h2 class="v-list-title">{{ contest.title }}</h2>
+                    <h2 class="v-card-title"><nuxt-link :to="`/contest/${contest.id}`">{{ contest.title }}</nuxt-link></h2>
                     <a-space>
                         <span class="v-tag v-tag-link">
                             <template v-if="contest.isPublic">{{ t('contest.public') }}</template>
