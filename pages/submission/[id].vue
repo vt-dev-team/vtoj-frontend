@@ -47,6 +47,10 @@ const { status, data: submissionInfo, error, refresh } = useLazyAsyncData(`submi
     }
 });
 
+function refreshData() {
+    refresh();
+}
+
 if (error.value) {
     console.log(error.value)
 }
@@ -60,9 +64,9 @@ onMounted(async () => {
     <two-column-layout>
         <template #left>
             <div class="v-card">
-                <a-result v-if="status === 'error'" status="error" title="出错了" :description="error?.message">
+                <a-result v-if="status === 'error'" status="error" title="出错了" :sub-title="error?.message">
                     <template #extra>
-                        <a-button type="primary" @click="refresh">重试</a-button>
+                        <a-button type="primary" @click="refreshData">重试</a-button>
                     </template>
                 </a-result>
                 <template v-else-if="status !== 'success' || !submissionInfo">
@@ -72,7 +76,7 @@ onMounted(async () => {
                     <div class="v-card-title">
                         <submission-result :result="submissionInfo.result" />
                     </div>
-                    <a-progress type="line" :percent="60" :format="(p: number) => `${p}分`" />
+                    <a-progress type="line" :percent="60" :format="(p?: number) => `${p}分`" />
                     <a-divider />
                     编译器信息
                     <a-divider />
