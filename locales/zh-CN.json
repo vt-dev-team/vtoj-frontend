@@ -50,8 +50,8 @@
         "end_at": "结束于",
         "private": "私有",
         "public": "公开",
-        "ACM": "ACM",
-        "OI": "OI",
+        "ACM": "ACM 赛制",
+        "OI": "OI 赛制",
         "normal_practice": "普通练习"
     },
     "submission": {

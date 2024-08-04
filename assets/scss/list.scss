@@ -19,6 +19,16 @@
             border-bottom: 1px solid rgba(0, 0, 0, .12);
         }
 
+        &.primary {
+            background-color: #1780db;
+            color: #fff;
+        }
+
+        &.grey {
+            background-color: #a5a5a5;
+            color: #fff;
+        }
+
         .v-fix-body {
             margin-top: 10px;
             margin-bottom: -12px;
@@ -41,10 +51,16 @@
 .v-list.v-list-hover {
     .v-list-item {
         transition: background-color .2s;
-        cursor: pointer;
+        &:not(.unhover) {
+            cursor: pointer;
 
-        &:hover {
-            background-color: rgba(0, 0, 0, .04);
+            &:hover {
+                background-color: rgba(0, 0, 0, .04);
+            }
+
+            &.primary:hover {
+                background-color: #2790eb;
+            }
         }
     }
 }

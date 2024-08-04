@@ -162,14 +162,9 @@ function contestTooltipTitle(contest: VContestOutline): string {
             </template>
             <template v-else>
                 <div class="v-card" v-for="contest in contestData.data" :key="contest.id">
-                    <h2 class="v-card-title"><nuxt-link :to="`/contest/${contest.id}`">{{ contest.title }}</nuxt-link></h2>
+                    <h2 class="v-card-title"><nuxt-link :to="`/contest/${contest.id}`">{{ contest.title }}</nuxt-link>
+                    </h2>
                     <a-space>
-                        <span class="v-tag v-tag-link">
-                            <template v-if="contest.isPublic">{{ t('contest.public') }}</template>
-                            <template v-else>{{ t('contest.private') }}</template>
-                        </span>
-                        <span class="v-tag v-tag-link primary">{{ $t(contestTypeDict[contest.mode])
-                            }}</span>
                         <a-tooltip>
                             <template #title>
                                 <div>
@@ -178,16 +173,22 @@ function contestTooltipTitle(contest: VContestOutline): string {
                                 </div>
                             </template>
                             <a-space>
-                                <span class="v-tag v-tag-link warning">
-                                    <clock-circle-filled />
-                                    {{ $t('contest.duration') }} {{
-                                        calcDuration(contest) }}</span>
                                 <!-- 比赛中，未开始或者已结束-->
                                 <span class="v-tag v-tag-link" :class="contestStatusClass(contest)">
                                     {{ contestStatus(contest) }}
                                 </span>
+                                <span class="v-tag v-tag-link warning">
+                                    <clock-circle-filled />
+                                    {{ $t('contest.duration') }} {{
+                                        calcDuration(contest) }}</span>
                             </a-space>
                         </a-tooltip>
+                        <span class="v-tag v-tag-link">
+                            <template v-if="contest.isPublic">{{ t('contest.public') }}</template>
+                            <template v-else>{{ t('contest.private') }}</template>
+                        </span>
+                        <span class="v-tag v-tag-link primary">{{ $t(contestTypeDict[contest.mode])
+                            }}</span>
                     </a-space>
                     <div class="v-card-fix-body v-contest-footer">
                         <a-tooltip>
@@ -205,14 +206,6 @@ function contestTooltipTitle(contest: VContestOutline): string {
                     <a-pagination v-model:current="currentPage" v-model:page-size="pageSize"
                         :total="contestData.totalRecords" show-less-items />
                 </div>
-                <!--div class="v-card">
-                    <div class="v-card-fix-body" style="margin-top: -16px">
-                        <div class="v-pagination">
-                            <a-pagination v-model:current="currentPage" v-model:page-size="pageSize"
-                                :total="contestData.totalRecords" show-less-items />
-                        </div>
-                    </div>
-                </div-->
             </template>
         </template>
         <template #right>
